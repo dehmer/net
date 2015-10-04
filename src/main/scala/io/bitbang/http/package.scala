@@ -30,6 +30,5 @@ package io.bitbang
 package object http {
   type Method = String
   type Handler = (Request, Response) => Any
-  val EmptyRoutes = List[Route]()
   def header(field: String, value: Any): String = field + ": " + value.toString
 }
