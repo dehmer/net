@@ -27,6 +27,12 @@ package io.bitbang.net
 import java.io.File
 import java.nio.charset.{Charset, StandardCharsets}
 
+/**
+ * Simple socket like abstraction to access selector loop.
+ * See public selector loop API for descriptions.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 trait Socket {
   def bufferSize(size: Int): Unit
   def write(buffer: Array[Byte], offset: Int, length: Int): Unit

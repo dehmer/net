@@ -31,6 +31,8 @@ import scala.util.{Failure, Success, Try}
 
 package object net {
 
+  var EmptyBuffer = new Array[Byte](0)
+
   implicit class RichExecutorService(executor: ExecutorService) {
     def shutdownGracefully(gracePeriod: Long, unit: TimeUnit): Try[util.List[Runnable]] = {
       // Ask nicely:

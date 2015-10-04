@@ -25,10 +25,8 @@
 package io.bitbang.http
 
 import java.nio.ByteBuffer
-
 import scala.collection.mutable.ListBuffer
-
-import io.bitbang.net.{Decoder, CumulatingDecoder}
+import io.bitbang.net.{CumulatingDecoder, Decoder}
 import io.bitbang.pipeline.Context
 
 // $ curl http://localhost:8080
@@ -36,7 +34,7 @@ import io.bitbang.pipeline.Context
 // $ curl -XPOST --header "Transfer-Encoding: chunked" --data-binary @dataset.json http://localhost:8080
 
 /**
- * @author Horst Dehmer
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 class RequestDecoder extends CumulatingDecoder {
 

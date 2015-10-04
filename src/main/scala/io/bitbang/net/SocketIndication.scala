@@ -24,6 +24,11 @@
 
 package io.bitbang.net
 
+/**
+ * Events passed from [[SocketLayer]] to its upper layer.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 sealed trait SocketIndication
 
 final case class DataInd(buffer: Array[Byte]) extends SocketIndication

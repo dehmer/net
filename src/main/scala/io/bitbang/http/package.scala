@@ -22,21 +22,14 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang.http
+package io.bitbang
 
-import scala.collection.mutable.ListBuffer
-
-/** Generic message header for requests and responses. */
-case class MessageHeader(startLine: String, headers: ListBuffer[String]) {
-  def hasField(name: String) = headers.exists(s => s.startsWith(name + ":"))
-
-  def hasValue(name: String, value: String) = headers.contains(name + ": " + value.toLowerCase)
-  def intValue(name: String): Int = headers.find(s => s.startsWith(name + ":")) match {
-    case Some(field) => field.substring((name + ": ").length).toInt
-    case None        => throw new IllegalArgumentException("header-field not found: " + name)
-  }
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
+package object http {
+  type Method = String
+  type Handler = (Request, Response) => Any
+  val EmptyRoutes = List[Route]()
+  def header(field: String, value: Any): String = field + ": " + value.toString
 }
-
-case class Body(content: Array[Byte])
-case class Chunk(content: Array[Byte])
-

@@ -30,7 +30,7 @@ package io.bitbang.pipeline
  * Their ordering and interaction define the actual protocols
  * implemented by pipelines.
  *
- * @author Horst Dehmer (horst.dehmer@syncpoint.io)
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 trait Layer {
 

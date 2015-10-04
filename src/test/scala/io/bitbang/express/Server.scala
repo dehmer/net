@@ -22,14 +22,19 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang.http
+package io.bitbang.express
 
 import java.net.InetSocketAddress
-
+import io.bitbang.Combinators
+import io.bitbang.http.{RequestDecoder, RequestHandler, ResponseEncoder}
 import io.bitbang.net._
 import io.bitbang.pipeline._
-import io.bitbang.Combinators
 
+/**
+ * Experimental HTTP server with Express like routing (for testing, only).
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 object Server extends App {
   val bootstrap = new Bootstrap("TCP")
 
@@ -46,7 +51,6 @@ object Server extends App {
   // $ curl http://localhost:8080/nodes
   // $ curl -XPOST -H"Content-Type: application/json" -d '{"nodeId": "120000000"}' http://localhost:8080/nodes
   // $ curl -XDELETE http://localhost:8080/nodes/123/connections/456/dp
-
 
   def expressHandler: Layer = new ExpressHandler K { express =>
     express.get("/", (request, response) => response.send("hey, there!\n"))

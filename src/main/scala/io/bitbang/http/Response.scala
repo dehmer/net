@@ -25,9 +25,11 @@
 package io.bitbang.http
 
 import scala.collection.mutable.ListBuffer
-
 import io.bitbang.pipeline.Context
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class Response(requestHeader: MessageHeader, context: Context) {
   private var headers = Map[String, Array[String]]()
 

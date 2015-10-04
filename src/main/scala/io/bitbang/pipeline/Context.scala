@@ -35,7 +35,7 @@ package io.bitbang.pipeline
  *
  * @param name Name under which a layer is registered with a pipeline.
  *
- * @author Horst Dehmer (horst.dehmer@syncpoint.io)
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 abstract class Context(val name: String) {
 

@@ -53,6 +53,8 @@ import java.nio.channels.{SelectableChannel, ServerSocketChannel => SSC, SocketC
  *   for a given channel.
  *   </li>
  * </ul>
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 sealed trait TcpEvent
 

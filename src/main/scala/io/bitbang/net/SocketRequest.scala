@@ -27,6 +27,12 @@ package io.bitbang.net
 import java.io.File
 import java.nio.charset.{Charset, StandardCharsets}
 
+/**
+ * Requests handled by [[SocketLayer]].
+ * [[SocketRequest]]s are translated to selector loop API calls.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 sealed trait SocketRequest
 
 object WriteBufferReq {

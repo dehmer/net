@@ -24,6 +24,9 @@
 
 package io.bitbang
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 package object pipeline {
   type MessageHandler = PartialFunction[AnyRef, Any]
 }

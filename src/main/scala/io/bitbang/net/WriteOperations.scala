@@ -32,38 +32,16 @@ import scala.collection.mutable
 
 import io.bitbang.Combinators
 
-object WriteOperations {
-  type WriteOperation = SocketChannel => Long
-
-  def writeBufferOp(buffer: Array[Byte], off: Int, len: Int): WriteOperation = {
-    val src = ByteBuffer.wrap(buffer, off, len)
-
-    channel => {
-      channel.write(src)
-      src.remaining()
-    }
-  }
-
-  def writeFileOp(file: File, off: Long, len: Long): WriteOperation = {
-    val stream = new FileInputStream(file)
-    val fileChannel = stream.getChannel
-    var transferred = 0L
-
-    channel => {
-      transferred += fileChannel.transferTo(off + transferred, len - transferred, channel)
-      len - transferred K { remaining =>
-        // This closes the file channel as well:
-        if (remaining == 0) stream.close()
-      }
-    }
-  }
-}
-
+/**
+ * Helper used to queue and perform write operations.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class WriteOperations {
 
   import WriteOperations._
 
-  // TODO: unbounded number of write ops per channel is probably not such a good idea
+  // TODO: unbounded number of write ops per channel is probably not such a good idea.
   private val ops = mutable.Map[SelectableChannel, mutable.ArrayBuffer[WriteOperation]]()
 
   def append(channel: SocketChannel, op: WriteOperation): Unit = {
@@ -91,5 +69,34 @@ final class WriteOperations {
   def isEmpty(channel: SelectableChannel): Boolean = ops.get(channel) match {
     case Some(buf) => buf.isEmpty
     case None      => true
+  }
+}
+
+object WriteOperations {
+  type WriteOperation = SocketChannel => Long
+
+  /** Factory for buffer write operations. */
+  def writeBufferOp(buffer: Array[Byte], off: Int, len: Int): WriteOperation = {
+    val src = ByteBuffer.wrap(buffer, off, len)
+
+    channel => {
+      channel.write(src)
+      src.remaining()
+    }
+  }
+
+  /** Factory for file write operations. */
+  def writeFileOp(file: File, off: Long, len: Long): WriteOperation = {
+    val stream = new FileInputStream(file)
+    val fileChannel = stream.getChannel
+    var transferred = 0L
+
+    channel => {
+      transferred += fileChannel.transferTo(off + transferred, len - transferred, channel)
+      len - transferred K { remaining =>
+        // This closes the file channel as well:
+        if (remaining == 0) stream.close()
+      }
+    }
   }
 }

@@ -29,8 +29,10 @@ import scala.collection.JavaConversions
 
 /**
  * Abstract factory function for named layers.
+ * Note: Although pipelines can be created without using layer providers,
+ * this API might be useful when using DI frameworks.
  *
- * @author Horst Dehmer (horst.dehmer@syncpoint.io)
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 trait LayerProvider extends (() => (String, Layer))
 

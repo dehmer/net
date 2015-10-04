@@ -26,9 +26,22 @@ package io.bitbang.net
 
 import io.bitbang.pipeline.{Context, Layer, MessageHandler}
 
+/**
+ * Handles up-/downstream communication between a pipeline
+ * and the selector loop.
+ * This layer is typically the bottom most layer in a pipeline.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class SocketLayer extends Layer {
   private var socket: Socket = _
 
+  /**
+   * Translates [[SocketEvent]] to [[SocketIndication]].
+   *
+   * @param context Context of the layer in a given pipeline.
+   * @return Partial function, which can or can not handle the current upstream message.
+   */
   override def handleUpstream(context: Context): MessageHandler = {
     case SoOpen(s)           => this.socket = s; context.sendUpstream(OpenInd)
     case SoData(buffer)      => context.sendUpstream(DataInd(buffer))
@@ -43,6 +56,12 @@ final class SocketLayer extends Layer {
     case unhandled           => context.unhandledMessage(unhandled)
   }
 
+  /**
+   * Translates [[SocketRequest]] to socket (i.e. selector loop) calls.
+   *
+   * @param context Context of the layer in a given pipeline.
+   * @return Partial function, which can or can not handle the current downstream message.
+   */
   override def handleDownstream(context: Context): MessageHandler = {
     case BufferSizeReq(size)                    => socket.bufferSize(size)
     case WriteBufferReq(buffer, offset, length) => socket.write(buffer, offset, length)

@@ -29,16 +29,18 @@ import java.nio.{BufferUnderflowException, ByteBuffer}
 import scala.annotation.tailrec
 
 /**
- * Provides a buffer for parsing upstream backend messages
+ * Provides a buffer for parsing upstream messages
  * into higher-level messages passed on to upper application layer.
  * NOTE: This layer is stateful.
  * It accumulates incomplete frames, i.e. byte buffers from TCP,
  * until they can be decoded.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 abstract class CumulatingDecoder extends UpstreamLayer with Decoder {
 
   /* Holds un-parsed data from previous decode cycle(s), if any. */
-  private var acc = new Array[Byte](0)
+  private var acc = EmptyBuffer
 
   override def handleUpstream(context: Context) = {
     case DataInd(buffer) => handle(context, updateBuffer(buffer))
@@ -62,7 +64,7 @@ abstract class CumulatingDecoder extends UpstreamLayer with Decoder {
       buffer.mark()
       decode(context, buffer)
       doDecode(context, buffer)
-    } else acc = new Array[Byte](0)
+    } else acc = EmptyBuffer
   }
 
   private def updateBuffer(bytes: Array[Byte]): ByteBuffer = {

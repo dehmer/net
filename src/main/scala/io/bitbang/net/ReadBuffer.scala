@@ -27,6 +27,12 @@ package io.bitbang.net
 import java.nio.ByteBuffer
 import java.nio.channels.SocketChannel
 
+/**
+ * Fixed-length read buffer used by selector loop to read from channels.
+ *
+ * @param capacity Initial, fixed buffer capacity.
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class ReadBuffer(capacity: Int) {
   private val buffer = ByteBuffer.allocate(capacity)
 

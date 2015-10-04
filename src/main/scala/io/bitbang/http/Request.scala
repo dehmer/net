@@ -24,32 +24,23 @@
 
 package io.bitbang.http
 
-import io.bitbang.pipeline.{Context, MessageHandler, UpstreamLayer}
+import java.util.StringTokenizer
 
 /**
- * @author Horst Dehmer
+ * HTTP request containing message header and (optional) body.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
-class ExpressHandler extends UpstreamLayer {
-  private var map = Map[Method, List[Route]]()
+final class Request(val header: MessageHeader, val body: Array[Byte]) {
+  def this(header: MessageHeader) = this(header, new Array[Byte](0))
 
-  override def handleUpstream(context: Context): MessageHandler = {
-    case request: Request => handle(context, request)
-    case unhandled => context.unhandledMessage(unhandled)
+  lazy val (method: String, path: String) = {
+    val tokens = new StringTokenizer(header.startLine)
+    (tokens.nextToken().toLowerCase, tokens.nextToken())
   }
 
-  def get(path: String, handler: Handler) = pushRoute(Method.Get, path, handler)
-  def post(path: String, handler: Handler) = pushRoute(Method.Post, path, handler)
-  def delete(path: String, handler: Handler) = pushRoute(Method.Delete, path, handler)
+  private var params = Map[String, String]()
 
-  private def handle(context: Context, request: Request): Unit = {
-    map.
-      getOrElse(request.method.toLowerCase, EmptyRoutes).
-      filter(r => r.matches(request.path)).
-      foreach(r => r.handler(r.extractParams(request), new Response(request.header, context)))
-  }
-
-  private def pushRoute(method: Method, path: String, handler: Handler) {
-    val routes = map.getOrElse(method.toLowerCase, EmptyRoutes)
-    map += (method.toLowerCase -> (new Route(path, handler) :: routes))
-  }
+  def addParam(name: String, value: String): Unit = params += (name -> value)
+  def param(name: String) = params(name)
 }

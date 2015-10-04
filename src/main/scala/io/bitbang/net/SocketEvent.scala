@@ -27,8 +27,9 @@ package io.bitbang.net
 /**
  * Events sent from [[Bootstrap]] to the bottom layer of a [[io.bitbang.pipeline.Pipeline]],
  * which is usually a [[SocketLayer]].
- * [[SocketEvent]]s are very similar to, and created from, [[TcpEvent]]s.
+ * [[SocketEvent]]s are very similar to, and are created from, [[TcpEvent]]s.
  *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 sealed trait SocketEvent
 

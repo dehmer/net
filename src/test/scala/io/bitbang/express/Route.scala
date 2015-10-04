@@ -22,11 +22,15 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang.http
+package io.bitbang.express
 
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match
+import io.bitbang.http._
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class Route(path: String, val handler: Handler) {
   case class Key(name: String, optional: Boolean)
   private var keys         = List[Key]()

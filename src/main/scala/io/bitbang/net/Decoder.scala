@@ -30,10 +30,12 @@ import java.nio.ByteBuffer
 
 /**
  * General decoder contract.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 trait Decoder {
   def decode(context: Context, buffer: ByteBuffer): Unit
 
   // convenience: create and fill new byte array of predetermined length:
-  def get(buffer: ByteBuffer, length: Int) = new Array[Byte](length) K buffer.get
+  final def get(buffer: ByteBuffer, length: Int) = new Array[Byte](length) K buffer.get
 }

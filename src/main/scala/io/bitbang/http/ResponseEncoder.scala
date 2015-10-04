@@ -22,11 +22,42 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang.net
+package io.bitbang.http
 
-import java.net.SocketAddress
+import io.bitbang.net.{ErrorInd, WriteBufferReq, WriteStringReq}
+import io.bitbang.pipeline.{Context, Layer, MessageHandler}
 
-trait TcpClient extends AutoCloseable {
-  def connect(endpoint: SocketAddress): Unit = connect(endpoint, callback => {})
-  def connect(endpoint: SocketAddress, callback: (AnyRef => Any) => Any): Unit
+/**
+ * @author Horst Dehmer
+ */
+class ResponseEncoder extends Layer {
+  override def handleDownstream(context: Context) = {
+    case header: MessageHeader => messageHeader(context, header)
+    case Body(content)         => body(context, content)
+    case unhandled             => context.sendDownstream(unhandled)
+  }
+
+  override def handleUpstream(context: Context): MessageHandler = {
+    case ErrorInd(exception) => exception.printStackTrace()
+    case unhandled           => context.sendUpstream(unhandled)
+  }
+
+  private def messageHeader(context: Context, messageHeader: MessageHeader): Unit = {
+    val sb = new StringBuilder
+    sb.append(messageHeader.startLine)
+    sb.append("\r\n")
+
+    messageHeader.headers.foreach { header =>
+      sb.append(header)
+      sb.append("\r\n")
+    }
+
+    sb.append("\r\n")
+
+    context.sendDownstream(WriteStringReq(sb.toString()))
+  }
+
+  private def body(context: Context, content: Array[Byte]): Unit = {
+    context.sendDownstream(WriteBufferReq(content))
+  }
 }

@@ -35,7 +35,7 @@ import io.bitbang.Combinators
  *
  * NOTE: Layers are added from bottom to top.
  *
- * @author Horst Dehmer (horst.dehmer@syncpoint.io)
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 final class Pipeline { pipeline =>
 

@@ -29,6 +29,8 @@ import java.util.concurrent.ExecutorService
 
 /**
  * Collection of more or less useful helpers.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 package object bitbang {
 
@@ -71,12 +73,12 @@ package object bitbang {
     }
   }
 
-  /** Allow for `() => Any` to be treated as [[Runnable]] */
+  /** Allow for `() => Any` to be treated as `Runnable`. */
   implicit class RunnableWrapper(f: () => Any) extends Runnable {
     override def run(): Unit = f()
   }
 
-  /** Automatic Resource Management (ARM) like interface for [[ExecutorService]]. */
+  /** Automatic Resource Management (ARM) like interface for `ExecutorService`. */
   implicit class RichExecutorService[E <: ExecutorService](executor: E) extends Traversable[E] {
     override def foreach[U](f: (E) => U): Unit = {
       try f(executor)

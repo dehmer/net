@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Syncpoint GmbH (http://www.syncpoint.io/) 
+ * Copyright (c) 2015 Syncpoint GmbH (http://www.syncpoint.io/)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package io.bitbang.http
 
-import io.bitbang.pipeline.{Context, MessageHandler, UpstreamLayer}
 import io.bitbang.Combinators
+import io.bitbang.pipeline.{Context, MessageHandler, UpstreamLayer}
 
 /**
- * @author Horst Dehmer
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 class RequestHandler extends UpstreamLayer {
   type Behavior = (Context) => MessageHandler

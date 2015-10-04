@@ -35,6 +35,13 @@ import scala.concurrent.Future
 import io.bitbang.pipeline.Pipeline
 import io.bitbang.Combinators
 
+/**
+ * Glue between low-level selector loop events and pipeline abstraction.
+ * Associates client/server pipelines with a selector loop.
+ *
+ * @param name Name prefix for selector loop threads.
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class Bootstrap(name: String) extends Closeable {
   private val pfs = mutable.Map[SSC, () => Pipeline]()
   private val ps  = mutable.Map[SC, Pipeline]()

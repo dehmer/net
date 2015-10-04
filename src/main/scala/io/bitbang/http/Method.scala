@@ -24,40 +24,18 @@
 
 package io.bitbang.http
 
-import io.bitbang.net.{WriteBufferReq, WriteStringReq, ErrorInd}
-import io.bitbang.pipeline.{Context, Layer, MessageHandler}
-
 /**
- * @author Horst Dehmer
+ * HTTP methods/verbs.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
-class ResponseEncoder extends Layer {
-  override def handleDownstream(context: Context) = {
-    case header: MessageHeader => messageHeader(context, header)
-    case Body(content)         => body(context, content)
-    case unhandled             => context.sendDownstream(unhandled)
-  }
-
-  override def handleUpstream(context: Context): MessageHandler = {
-    case ErrorInd(exception) => exception.printStackTrace()
-    case unhandled           => context.sendUpstream(unhandled)
-  }
-
-  private def messageHeader(context: Context, messageHeader: MessageHeader): Unit = {
-    val sb = new StringBuilder
-    sb.append(messageHeader.startLine)
-    sb.append("\r\n")
-
-    messageHeader.headers.foreach { header =>
-      sb.append(header)
-      sb.append("\r\n")
-    }
-
-    sb.append("\r\n")
-
-    context.sendDownstream(WriteStringReq(sb.toString()))
-  }
-
-  private def body(context: Context, content: Array[Byte]): Unit = {
-    context.sendDownstream(WriteBufferReq(content))
-  }
+object Method {
+  val Options = "OPTIONS"
+  val Get     = "GET"
+  val Head    = "HEAD"
+  val Post    = "POST"
+  val Put     = "PUT"
+  val Delete  = "DELETE"
+  val Trace   = "TRACE"
+  val Connect = "CONNECT"
 }

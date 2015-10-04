@@ -32,6 +32,9 @@ import org.junit.{Assert, Test}
 import io.bitbang.pipeline._
 import io.bitbang.{Combinators, RichCloseable}
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class BootstrapTest {
 
   @Test def echo(): Unit = new Bootstrap("TCP").foreach { bootstrap =>

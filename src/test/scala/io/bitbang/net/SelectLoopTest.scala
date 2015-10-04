@@ -31,6 +31,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.junit.{Assert, Test}
 import org.slf4j.LoggerFactory
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 class SelectLoopTest {
   private val logger         = LoggerFactory.getLogger(classOf[SelectLoopTest])
   private val message        = "welcome"

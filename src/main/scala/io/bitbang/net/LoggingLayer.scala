@@ -28,6 +28,9 @@ import org.slf4j.LoggerFactory
 
 import io.bitbang.pipeline.{Context, Layer}
 
+/**
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
+ */
 final class LoggingLayer extends Layer {
   private val logger     = LoggerFactory.getLogger(classOf[LoggingLayer])
   private val byteToChar = (for (i <- 0 to 255) yield if (i >= 32 && i < 127) i.toChar else '.').toArray

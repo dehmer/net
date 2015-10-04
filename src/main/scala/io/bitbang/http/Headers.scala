@@ -28,6 +28,8 @@ package io.bitbang.http
  * There are a few header fields which have general applicability for both request and
  * response messages, but which do not apply to the entity being transferred.
  * These header fields apply only to the message being transmitted.
+ *
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 object GeneralHeader {
   val CacheControl     = "Cache-Control"

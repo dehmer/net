@@ -39,31 +39,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, Promise}
 import scala.util.control.NonFatal
 
-object SelectorLoop {
-
-  /** Loop is running and accepts tasks for execution. */
-  private val RUNNING = 1 << 0
-
-  /** Loop is in the process of being disposed. */
-  private val DISPOSING = 1 << 1
-
-  /** Loop is disposed and no longer accepts tasks for execution (end state). */
-  private val DISPOSED = 1 << 2
-
-  /** Used to give each selector loop instance a unique number. */
-  private val SequenceNo        = new AtomicInteger(1)
-  private val DefaultBufferSize = 64 * 1024
-
-  /**
-   * Default read buffer; initially used for each channel.
-   */
-  private val DefaultReadBuffer = new ReadBuffer(DefaultBufferSize)
-
-  def apply(name: String)(dispatch: PartialFunction[TcpEvent, Any]) = {
-    new SelectorLoop(name, dispatch)
-  }
-}
-
 /**
  * Single-threaded NIO TCP selector loop for managing an arbitrary number of server and client
  * socket channels.
@@ -71,6 +46,7 @@ object SelectorLoop {
  *
  * @param name Base name for underlying selector thread.
  * @param dispatch Callback to receive events emitted during the selection process.
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 final class SelectorLoop(name: String, dispatch: PartialFunction[TcpEvent, Any]) extends Closeable {
 
@@ -432,5 +408,32 @@ final class SelectorLoop(name: String, dispatch: PartialFunction[TcpEvent, Any])
     // Cancels all keys and hopefully allows for attachments to be GCed too:
     channel.close()
     dispatch(TcpClosed(channel))
+  }
+}
+
+object SelectorLoop {
+
+  /** Loop is running and accepts tasks for execution. */
+  private val RUNNING = 1 << 0
+
+  /** Loop is in the process of being disposed. */
+  private val DISPOSING = 1 << 1
+
+  /** Loop is disposed and no longer accepts tasks for execution (end state). */
+  private val DISPOSED = 1 << 2
+
+  /** Used to give each selector loop instance a unique number. */
+  private val SequenceNo        = new AtomicInteger(1)
+
+  /** Note: Read buffer size can be changed on per channel basis. */
+  private val DefaultBufferSize = 64 * 1024
+
+  /**
+   * Default read buffer; initially used for each channel.
+   */
+  private val DefaultReadBuffer = new ReadBuffer(DefaultBufferSize)
+
+  def apply(name: String)(dispatch: PartialFunction[TcpEvent, Any]) = {
+    new SelectorLoop(name, dispatch)
   }
 }

@@ -28,7 +28,7 @@ import java.net.InetSocketAddress
 import java.util.concurrent.CountDownLatch
 
 /**
- * @author Horst Dehmer
+ * @author <a href="mailto:horst.dehmer@snycpoint.io">Horst Dehmer</a>
  */
 object EchoExample extends App {
 
