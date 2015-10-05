@@ -22,11 +22,21 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang
+package io.bitbang.express
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 /**
- * Experimental node.js/Express like API.
+ * @author Horst Dehmer
  */
-package object express {
-  def express(): Express = new Express
+object ExpressServer extends App {
+
+  val app = express()
+  app.get("/", (req, res) => res.send("Hello, World!"))
+
+  app.listen(3000).onComplete {
+    case Success(address)   => println(s"app listening on $address.")
+    case Failure(exception) => exception.printStackTrace()
+  }
 }

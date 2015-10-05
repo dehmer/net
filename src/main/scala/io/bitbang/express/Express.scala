@@ -22,11 +22,36 @@
  * THE SOFTWARE.
  */
 
-package io.bitbang
+package io.bitbang.express
+
+import java.net.{SocketAddress, InetSocketAddress}
+import scala.concurrent.Future
+import io.bitbang.http._
+import io.bitbang.Combinators
+import io.bitbang.net.{LoggingLayer, SocketLayer, Bootstrap}
+import io.bitbang.pipeline.Pipeline
 
 /**
- * Experimental node.js/Express like API.
+ * @author Horst Dehmer
  */
-package object express {
-  def express(): Express = new Express
+final class Express {
+  private val bootstrap = new Bootstrap("EXPRESS")
+  private val routes = new ExpressHandler
+
+  def get(path: String, handler: Handler) = routes.get(path, handler)
+  def post(path: String, handler: Handler) = routes.post(path, handler)
+  def delete(path: String, handler: Handler) = routes.delete(path, handler)
+
+  def listen(port: Int): Future[SocketAddress] = {
+    bootstrap.bind(new InetSocketAddress(port), pipeline)
+  }
+
+  def pipeline = () => new Pipeline K { pipeline =>
+    pipeline.addLast("socket", new SocketLayer)
+    pipeline.addLast("logging", new LoggingLayer)
+    pipeline.addLast("encoder", new ResponseEncoder)
+    pipeline.addLast("decoder", new RequestDecoder)
+    pipeline.addLast("handler", new RequestHandler)
+    pipeline.addLast("express", routes)
+  }
 }
